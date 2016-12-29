@@ -1,4 +1,5 @@
 <?php
+if( !class_exists('Magee_Expand') ):
 class Magee_Expand {
 
 	public static $args;
@@ -24,43 +25,37 @@ class Magee_Expand {
 			array(
 				'id' 					=>'',
 				'class' 				=>'',
-				'more_icon'				=>'',	
+				'more_icon'				=>'',
+				'more_icon_color'	    =>'',
 				'more_text'				=>'',
-				'less_icon'				=>'',	
+				'less_icon'				=>'',
+				'less_icon_color'	    =>'', 
 				'less_text'				=>'',
 				
 			), $args
 		);
 		extract( $defaults );
 		self::$args = $defaults;
+		$uniqid = uniqid("control-");
+	
         $html ='
-		<div class="magee-expand '.esc_attr($class).'" id="'.esc_attr($id).'">
-            <div class="expand-control"><i class="fa '.esc_attr($more_icon).'"></i> '.esc_attr($more_text).'</div>
+		<div class="magee-expand '.esc_attr($class).'" id="'.esc_attr($id).'" data-less-icon="'.esc_attr($less_icon).'" data-less-icon-color="'.esc_attr($less_icon_color).'" data-less-text="'.esc_attr($less_text).'" data-more-icon="'.esc_attr($more_icon).'" data-more-icon-color="'.esc_attr($more_icon_color).'" data-more-text="'.esc_attr($more_text).'">
+            <div class="expand-control '.$uniqid.'">';
+		if( stristr($more_icon,'fa-')):
+		$html	.=	'<i class="fa '.esc_attr($more_icon).'" style="color:'.$more_icon_color.';"></i> ';
+		else:
+		$html	.=	'<img src="'.esc_attr($more_icon).'" class="image-instead"/>';
+		endif;
+		$html	.=	esc_attr($more_text).'</div>
             <div class="expand-content" style="display:none;">
                 '.do_shortcode( Magee_Core::fix_shortcodes($content)).'
             </div>
         </div>' ;
-		$html .='
-		<script>
-        jQuery(function($) {
-		     
-		     $(".expand-control").toggle(
-			  function(){	      				  
-                        $(this).html(\'<i class="fa '.esc_attr($less_icon).'"></i> '.esc_attr($less_text).'\');
-                      },
-			 function(){	      				  
-                        $(this).html(\'<i class="fa '.esc_attr($more_icon).'"></i> '.esc_attr($more_text).'\');
-                      }
-			 );
-			 $(".expand-control").click(function(){
-			  $(".expand-content").slideToggle(500);
-			 });
-		   
-		});
-        </script>';
+		
         return $html;
 		
 		
 	}
 }
 new  Magee_Expand();		
+endif;

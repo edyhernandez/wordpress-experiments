@@ -1,4 +1,5 @@
 <?php
+if( !class_exists('Magee_Dailymotion') ):
 class Magee_Dailymotion {
     
 	
@@ -38,7 +39,11 @@ class Magee_Dailymotion {
 	    
 		 extract( $defaults );
 		 self::$args = $defaults;
-		  if( $autoplay == 'yes'):
+		 if(is_numeric($width))
+			$width = $width.'px';
+		 if(is_numeric($height))
+			$height = $height.'px'; 
+		 if( $autoplay == 'yes'):
 		    $autoplay = '1';
 		 else:
 		    $autoplay = '0';
@@ -61,24 +66,15 @@ class Magee_Dailymotion {
 		 if( $link !== '') 
 		 $link = strtok(basename(esc_url($link)),'_');
 		 if( $width == '100%' || $width == '' &&  $height == '100%' || $height == ''):
-		 $html = '<div id="dailymotion"><iframe id="'.esc_attr($id).'" class="'.esc_attr($class).'" src="http://www.dailymotion.com/embed/video/' . $link . '?autoplay='.$autoplay.'&loop='.$loop.'&controls='.$controls.'&mute='.$mute.'" frameborder="0" allowfullscreen></iframe></div>';
+		 $html = '<div id="dailymotion" class="magee-dailymotion" data-width="'.$width.'" data-height="'.$height.'"><iframe id="'.esc_attr($id).'" class="'.esc_attr($class).'" src="//www.dailymotion.com/embed/video/' . $link . '?autoplay='.$autoplay.'&loop='.$loop.'&controls='.$controls.'&mute='.$mute.'" frameborder="0" allowfullscreen></iframe></div>';
 		 
-		 $html .= "<script>     
-		 var width = document.getElementById('dailymotion').clientWidth;
-		 var newwidth = document.getElementsByTagName('iframe')[0].clientWidth;
-		 var newheight = document.getElementsByTagName('iframe')[0].clientHeight;
-		 var op = newheight/newwidth ;
-		 newwidth = width;
-		 newheight = newwidth*op;
-		 document.getElementsByTagName('iframe')[0].setAttribute('width',newwidth);
-		 document.getElementsByTagName('iframe')[0].setAttribute('height',newheight);
-		            </script>";
 		else:
-		$html = '<div id="dailymotion"><iframe id="'.esc_attr($id).'" class="'.$uniqid.' '.esc_attr($class).'" width="'.$width.'" height="'.$height.'" src="http://www.dailymotion.com/embed/video/' . $link . '?autoplay='.$autoplay.'&loop='.$loop.'&controls='.$controls.'&mute='.$mute.'" frameborder="0" allowfullscreen></iframe></div>';
+		$html = '<div id="dailymotion" class="magee-dailymotion" data-width="'.$width.'" data-height="'.$height.'"><iframe id="'.esc_attr($id).'" class="'.esc_attr($class).'" width="'.$width.'" height="'.$height.'" src="//www.dailymotion.com/embed/video/' . $link . '?autoplay='.$autoplay.'&loop='.$loop.'&controls='.$controls.'&mute='.$mute.'" frameborder="0" allowfullscreen></iframe></div>';
 		endif;		   
 		 return $html;
 	 } 
 	 
 }
 
-new Magee_Dailymotion();		 
+new Magee_Dailymotion();		
+endif; 

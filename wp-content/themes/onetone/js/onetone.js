@@ -1,16 +1,11 @@
   ///// contact form
   
-  function IsEmail(email) {
-        var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-        if(!regex.test(email)) {
-           return false;
-        }else{
-           return true;
-        }
+  function IsEmail($email ) {
+       var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+       return emailReg.test( $email );
       }
-	  
 
-	jQuery("form.contact-form #submit").click(function(){
+jQuery("form.contact-form #submit").click(function(){
 	var obj = jQuery(this).parents(".contact-form");
 	var Name    = obj.find("input#name").val();
 	var Email   = obj.find("input#email").val();
@@ -354,6 +349,22 @@ jQuery(window).scroll(function(){
  $("a[rel^='portfolio-image']").prettyPhoto();	 
  // gallery lightbox
  $(".gallery .gallery-item a").prettyPhoto({animation_speed:'fast',slideshow:10000, hideflash: true});
-
+ 
+ 
+  if($(window).width() <1200){	
+						  newPercentage = (($(window).width() / 1200) * 100) + "%";
+						  $(".home-banner .heading-inner").css({"font-size": newPercentage});
+						  }			
+$(window).on("resize", function (){
+	if($(window).width() <1200){
+	newPercentage = (($(window).width() / 1200) * 100) + "%";
+	$(".home-banner .heading-inner").css({"font-size": newPercentage});
+	}else{
+	$(".home-banner .heading-inner").css({"font-size": "100%"});
+	}
+});  
 
  });
+
+
+ 

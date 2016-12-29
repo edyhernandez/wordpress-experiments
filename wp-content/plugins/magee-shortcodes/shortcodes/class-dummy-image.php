@@ -1,4 +1,5 @@
 <?php
+if( !class_exists('Magee_Dummy_Image') ):
 class Magee_Dummy_Image {
 
 	public static $args;
@@ -32,11 +33,13 @@ class Magee_Dummy_Image {
 		
 		extract( $defaults );
 		self::$args = $defaults;
+		
+		
 		if($style == 'any')
 		$style = rand(0,10) ;	
 			
 		$link = 'http://lorempixel.com/' .esc_attr($width). '/' . esc_attr($height) . '/'.esc_attr($style).'/';
-		$html = '<div class="'.esc_attr($class).'" id="'.esc_attr($id).'"><image src="'.$link.'" width="'.$width.'" height="'.$height.'"/></div>';
+		$html = '<div class="'.esc_attr($class).'" id="'.esc_attr($id).'"><img src="'.$link.'" width="'.$width.'px" height="'.$height.'px"/></div>';
 		return $html;
 		
 		
@@ -44,4 +47,5 @@ class Magee_Dummy_Image {
 	
 }
 
-new Magee_Dummy_Image();		
+new Magee_Dummy_Image();	
+endif;	

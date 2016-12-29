@@ -5,7 +5,7 @@
     return this.each(function() {
 
       var sliderPct = options.default_offset_pct;
-      var container = $(this);
+	  var container = $(this);
       var sliderOrientation = options.orientation;
       var beforeDirection = (sliderOrientation === 'vertical') ? 'down' : 'left';
       var afterDirection = (sliderOrientation === 'vertical') ? 'up' : 'right';
@@ -57,12 +57,12 @@
       $(window).on("resize.twentytwenty", function(e) {
         adjustSlider(sliderPct);
       });
-
       var offsetX = 0;
       var imgWidth = 0;
-      
       slider.on("movestart", function(e) {
+		 
         if (((e.distX > e.distY && e.distX < -e.distY) || (e.distX < e.distY && e.distX > -e.distY)) && sliderOrientation !== 'vertical') {
+			
           e.preventDefault();
         }
         else if (((e.distX < e.distY && e.distX < -e.distY) || (e.distX > e.distY && e.distX > -e.distY)) && sliderOrientation === 'vertical') {
@@ -77,9 +77,11 @@
 
       slider.on("moveend", function(e) {
         container.removeClass("active");
+	
       });
 
       slider.on("move", function(e) {
+		
         if (container.hasClass("active")) {
           sliderPct = (sliderOrientation === 'vertical') ? (e.pageY-offsetY)/imgHeight : (e.pageX-offsetX)/imgWidth;
           if (sliderPct < 0) {
@@ -91,11 +93,11 @@
           adjustSlider(sliderPct);
         }
       });
-
       container.find("img").on("mousedown", function(event) {
         event.preventDefault();
+	
       });
-
+       
       $(window).trigger("resize.twentytwenty");
     });
   };

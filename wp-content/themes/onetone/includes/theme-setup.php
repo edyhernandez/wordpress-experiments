@@ -71,6 +71,7 @@ add_action( 'after_setup_theme', 'onetone_setup' );
 	wp_enqueue_style('onetone-onetone',  get_template_directory_uri() .'/css/onetone.css', false, $theme_info->get( 'Version' ), false);
 	wp_enqueue_style('onetone-ms',  get_template_directory_uri() .'/css/onetone-ms.css', false, $theme_info->get( 'Version' ), false);
 	wp_enqueue_style('onetone-scheme',  get_template_directory_uri() .'/css/scheme.less', false, $theme_info->get( 'Version' ), false);
+	wp_enqueue_style('onetone-home',  get_template_directory_uri() .'/css/home.css', false, $theme_info->get( 'Version' ), false);
 	
 	if ( is_rtl() ) {
        wp_enqueue_style('onetone-rtl',  get_template_directory_uri() .'/rtl.css', false, $theme_info->get( 'Version' ), false);
@@ -381,6 +382,62 @@ add_action( 'after_setup_theme', 'onetone_setup' );
 	$onetone_custom_css  .= ".site-nav  ul li li a{border-color:".$main_menu_separator_color_2." !important;}";
 		
 	
+	// home page sections 
+	
+	$section_title_css   = '';
+	$section_content_css = '';
+	
+	
+	$video_background_section  = onetone_option( 'video_background_section' );
+	for($i=0;$i<15;$i++):
+	
+	$section_css         = '';
+	
+	$section_background  = onetone_option( 'section_background_'.$i );
+	$background_size     = onetone_option( 'background_size_'.$i );
+	$section_padding     = onetone_option( 'section_padding_'.$i ,$i == 0?'':'50px 0');
+    $text_align          = onetone_option( 'text_align_'.$i);
+	$parallax_scrolling  = onetone_option( 'parallax_scrolling_'.$i );
+	
+	$section_title_typography    = onetone_option( 'section_title_typography_'.$i);
+    $title_typography            = onetone_get_typography( $section_title_typography );
+ 
+	$section_content_typography  = onetone_option( 'section_content_typography_'.$i);
+	$content_typography          = onetone_get_typography( $section_content_typography );
+	
+	
+	if( $parallax_scrolling == "yes" || $parallax_scrolling == "1" ){
+	    $section_css .= "background-attachment:fixed;background-position:50% 0;background-repeat:repeat;\r\n";
+	 }
+	 
+	if( $background_size == "yes" ){
+		$section_css .= "-webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;\r\n";
+	}
+	if( $section_padding ){
+	    $section_css .= "padding:".$section_padding.";\r\n";; 
+	}
+	
+    if( $video_background_section != ($i+1) || $detect->isMobile() || $detect->isTablet() )
+	$section_css       .= onetone_get_background( $section_background );
+	
+	
+	$section_title_css .= "section.home-section-".($i+1)." .section-title{text-align:center ;}\r\n";
+	
+	if( $title_typography )
+	$section_title_css .= "section.home-section-".($i+1)." .section-title{".$title_typography."}\r\n";
+	
+	if( $content_typography )
+	$section_content_css .= "section.home-section-".($i+1)." .home-section-content,section.home-section-".($i+1)." .home-section-content p{".$content_typography."}\r\n";
+	if( $text_align )
+    $section_content_css .= "section.home-section-".($i+1)." .home-section-content{text-align:".$text_align."}\r\n";
+	$section_content_css .=  "section.home-section-".($i+1)." {".$section_css."}\r\n";	
+	
+	endfor;
+	
+	$onetone_custom_css  .=  $section_title_css;
+	$onetone_custom_css  .=  $section_content_css;
+	
+	
 	$onetone_custom_css  .=  $custom_css;
 	
 	wp_add_inline_style( 'onetone-main', $onetone_custom_css );
@@ -445,35 +502,13 @@ add_action( 'after_setup_theme', 'onetone_setup' );
 
 function onetone_of_get_options($default = false) {
 	
-	global $options_saved;
+	global $options_saved,$onetone_default_options;
 	$options_saved = false;
 	//$optionsframework_settings = get_option(ONETONE_OPTIONS_PREFIXED.'optionsframework');
 	
-	// Gets the unique option id
-	//$option_name = $optionsframework_settings['id'];
+	$default_options = optionsframework_options();
 	
-	$option_name  = optionsframework_option_name();
-	
-	if ( get_option($option_name) ) {
-		$options = get_option($option_name);
-		$options_saved = true;
-	}
-/*	else{
-		
-		 $location = apply_filters( 'options_framework_location', array('includes/admin-options.php') );
-
-	        if ( $optionsfile = locate_template( $location ) ) {
-				
-	            $maybe_options = require_once $optionsfile;
-	            if ( is_array( $maybe_options ) ) {
-					$options = $maybe_options;
-	            } else if ( function_exists( 'optionsframework_options' ) ) {
-					$options = optionsframework_options();
-				}
-	        }
-	    $options = apply_filters( 'of_options', $options );
-		$config  =  $options;
-		foreach ( (array) $config as $option ) {
+	foreach ( (array) $default_options as $option ) {
 			if ( ! isset( $option['id'] ) ) {
 				continue;
 			}
@@ -483,12 +518,24 @@ function onetone_of_get_options($default = false) {
 			if ( ! isset( $option['type'] ) ) {
 				continue;
 			}
-				$output[$option['id']] = apply_filters( 'of_sanitize_' . $option['type'], $option['std'], $option );
+				$onetone_default_options[$option['id']] = apply_filters( 'of_sanitize_' . $option['type'], $option['std'], $option );
 		}
-		$options = $output;
 		
+	// Gets the unique option id
+	//$option_name = $optionsframework_settings['id'];
+	
+	$option_name  = optionsframework_option_name();
+	
+	if ( get_option($option_name) ) {
+		$options = get_option($option_name);
+		$options_saved = true;
 		
-		}*/
+	}
+	else{
+		
+		$options = $onetone_default_options;
+		
+		}
 		
 	if ( isset($options) ) {
 		return $options;
@@ -503,11 +550,21 @@ $onetone_options = onetone_of_get_options();
 
 
 function onetone_option($name,$default=''){
-	global $onetone_options;
-	if(isset($onetone_options[$name]))
+	global $onetone_options,$onetone_default_options;
+	if(isset($onetone_options[$name])){
 	return $onetone_options[$name];
-	else
+	}
+	else{
+	if( $default != '' ){
 	return $default;
+	}
+	else{
+		if( isset($onetone_default_options[$name]) )
+		return $onetone_default_options[$name];
+		else
+		return '';
+		}
+	}
 }
 
 /* 

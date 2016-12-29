@@ -306,7 +306,8 @@ class Options_Framework_Admin {
 	 *
 	 */
 	function get_default_values() {
-		$output = array();
+		global $onetone_restore;
+		$output          = array();
 		$config = & Options_Framework::_optionsframework_options();
 		foreach ( (array) $config as $option ) {
 			if ( ! isset( $option['id'] ) ) {

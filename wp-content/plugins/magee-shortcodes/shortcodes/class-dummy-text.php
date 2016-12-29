@@ -1,4 +1,5 @@
 <?php
+if( !class_exists('Magee_Dummy_Text') ):
 class Magee_Dummy_Text {
 
 	public static $args;
@@ -22,7 +23,7 @@ class Magee_Dummy_Text {
 
 		$defaults =	Magee_Core::set_shortcode_defaults(
 			array(
-				'style' 				    =>'',
+				'style' 			    =>'',
 				'class' 				=>'',
 				'id' 				    =>'',
 				'amount'          		=>''
@@ -39,3 +40,4 @@ class Magee_Dummy_Text {
 }
 
 new Magee_Dummy_Text();		
+endif;

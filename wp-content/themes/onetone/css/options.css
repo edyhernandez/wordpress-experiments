@@ -265,6 +265,9 @@ ul.options-links li.pro a:hover {
 .accordion-group-item {
     display: none;
 }
+.section .section_wrapper {
+    display: none;
+}
 
 #optionsframework-wrap .group .section.section-start_group,
 #optionsframework-wrap .group .section.section-end_group {

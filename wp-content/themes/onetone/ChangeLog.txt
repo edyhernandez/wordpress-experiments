@@ -2,6 +2,12 @@
 
 == CHANGE LOG == 
 
+= Version 1.6.7  = 13/04/2016
+* Change screenshot
+
+= Version 1.6.6  = 13/04/2016
+* Added fixed section content options for homepage 
+
 = Version 1.6.5  = 07/03/2016
 * Fix - Fixed 'Display Header Text' issue
 

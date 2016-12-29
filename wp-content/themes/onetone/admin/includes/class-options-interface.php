@@ -63,7 +63,7 @@ class Options_Framework_Interface {
 			$output = '';
 
 			// Wrap all options
-			if ( ( $value['type'] != "heading" ) && ( $value['type'] != "info" ) ) {
+			if ( ( $value['type'] != "heading" ) && ( $value['type'] != "info" ) && ( $value['type'] != "wrapper_start" )   && ( $value['type'] != "wrapper_end" ) ) {
 
 				// Keep all ids lowercase with no spaces
 				$value['id'] = preg_replace('/[^a-zA-Z0-9._\-]/', '', strtolower($value['id']) );
@@ -465,15 +465,23 @@ class Options_Framework_Interface {
 				$class = ! empty( $value['id'] ) ? $value['id'] : $value['name'];
 				$output .= '<div class="tab_item_group ' . $class . '">';
 				break;
-				case "end_group":
-				$output .= '</div>';
-				break;
+			  case "end_group":
+			  $output .= '</div>';
+			  break;
+			  
+			  case "wrapper_start":
+			  $class = ! empty( $value['id'] ) ? $value['id'] : $value['name'];
+			  $output .= '<div class="section_wrapper ' . $class . '">';
+			  break;
+			  case "wrapper_end":
+			  $output .= '</div>';
+			  break;
 
 			
 				
 			}
 
-			if ( ( $value['type'] != "heading" ) && ( $value['type'] != "info" ) ) {
+			if ( ( $value['type'] != "heading" ) && ( $value['type'] != "info" )  && ( $value['type'] != "wrapper_start" )   && ( $value['type'] != "wrapper_end" )  ) {
 				$output .= '</div>';
 				if ( ( $value['type'] != "checkbox" ) && ( $value['type'] != "editor" ) ) {
 					$output .= '<div class="explain">' . wp_kses( $explain_value, $allowedtags) . '</div>'."\n";

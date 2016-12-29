@@ -22,17 +22,19 @@ load_template( trailingslashit( get_template_directory() ) . 'admin/options-fram
  if(!class_exists("Mobile_Detect")){
    load_template( trailingslashit( get_template_directory() ) . 'includes/Mobile_Detect.php' );
  }
+ 
+ 
+/**
+ * Theme Functions
+ **/
+ 
+load_template( trailingslashit( get_template_directory() ) . 'includes/theme-functions.php' );
 /**
  * Theme setup
  **/
  
 load_template( trailingslashit( get_template_directory() ) . 'includes/theme-setup.php' );
 
-/**
- * Theme Functions
- **/
- 
-load_template( trailingslashit( get_template_directory() ) . 'includes/theme-functions.php' );
 
 /**
  * Theme breadcrumb

@@ -797,19 +797,21 @@ function onetone_import_demos(){
 	
 // Onetone guide tips
 global $options_saved;
-if( (!isset($_GET['page']) || ($_GET['page'] !='onetone-options' && $_GET['page'] !='import-demos' && $_GET['page'] !='onetone' ) ) && $options_saved == false )
+$onetone_close_guide = get_option('onetone_close_guide');
+if( $onetone_close_guide != '1' )
+if( (!isset($_GET['page']) || ($_GET['page'] !='onetone-options' && $_GET['page'] !='import-demos' && $_GET['page'] !='onetone' ) ) && $options_saved == false  )
 add_action('admin_menu', 'onetone_guide_submenu_page');
 
 function onetone_guide_submenu_page() {
 	
 	// add_theme_page(__('Import Onetone Demos', 'onetone' ),__('Import Onetone Demos', 'onetone' ), 'edit_theme_options', 'import-demos', 'onetone_import_demos');
 	 
-	add_theme_page( __('Onetone step 2', 'onetone' ),  '<div class="onetone-step-2-text"><h2>'.__('Customize Content for Homepage', 'onetone' ).'</h2>
-<p>'.__('Open this page to edit content for homepage and customize styles of the site.', 'onetone' ).'</p><div id="onetone-step-1-text" style=" display:none;"><div class="onetone-step-1"><div class="onetone-step-1-text"><h2>'.__('Customize Content for Homepage', 'onetone' ).'</h2><p>'.__('Open this page to edit content for homepage and customize styles of the site.', 'onetone' ).'</p></div></div></div></div>', 'edit_theme_options', 'themes.php?page=onetone-options', '' );
+	add_theme_page( __('Onetone step 2', 'onetone' ),  '<div class="onetone-guide onetone-step-2-text"><h2>'.__('Customize Content for Homepage', 'onetone' ).' <span class="onetone-close-guide" style="float:right;">X</span></h2>
+<p>'.__('Open this page to edit content for homepage and customize styles of the site.', 'onetone' ).'</p><div id="onetone-step-1-text" style=" display:none;"><div class="onetone-step-1"><div class="onetone-guide onetone-step-1-text"><h2>'.__('Customize Content for Homepage', 'onetone' ).' <span class="onetone-close-guide" style="float:right;">X</span></h2><p>'.__('Open this page to edit content for homepage and customize styles of the site.', 'onetone' ).'</p></div></div></div></div>', 'edit_theme_options', 'themes.php?page=onetone-options', '' );
 }
 
 
-if( isset($_GET['page']) && $_GET['page'] =='onetone-options' )
+/*if( isset($_GET['page']) && $_GET['page'] =='onetone-options' )
 add_action('admin_footer', 'onetone_admin_footer_function');
 
 function onetone_admin_footer_function() {
@@ -817,7 +819,7 @@ function onetone_admin_footer_function() {
 	<div class="options-saved"><i class="fa fa-check"></i>'.__('Options Updated', 'onetone' ).'</div>
 	<div class="options-saving"><i class="fa fa-spinner fa-spin"></i>'.__('Options Saving', 'onetone' ).'</div>
 	';
-}
+}*/
 
 function onetone_tinymce_init() {
     // Hook to tinymce plugins filter
@@ -831,3 +833,37 @@ function onetone_tinymce_plugin($init) {
     $init['keyup_event'] = get_template_directory_uri() . '/js/keyup_event.js';
     return $init;
 }
+
+
+add_filter( 'wp_kses_allowed_html', 'onetone_allowedposttags_filter',1,1 );
+
+function onetone_allowedposttags_filter( $allowedposttags ) {
+
+ $allowedposttags['i'] = array ( 'class' => 1,'style' => 1);
+ $allowedposttags['input']  = array ( 'class' => 1, 'id'=> 1, 'style' => 1, 'type' => 1, 'value' => 1 ,'placeholder'=> 1,'size'=> 1,'tabindex'=> 1,'aria-required'=> 1);
+ $allowedposttags['iframe'] = array(
+					'align' => true,
+					'width' => true,
+					'height' => true,
+					'frameborder' => true,
+					'name' => true,
+					'src' => true,
+					'id' => true,
+					'class' => true,
+					'style' => true,
+					'scrolling' => true,
+					'marginwidth' => true,
+					'marginheight' => true,
+					
+  );
+	  return $allowedposttags;
+
+}
+
+function onetone_close_guide(){
+	update_option("onetone_close_guide",'1');
+	}
+
+add_action('wp_ajax_onetone_close_guide', 'onetone_close_guide');
+add_action('wp_ajax_nopriv_onetone_close_guide', 'onetone_close_guide');
+ 

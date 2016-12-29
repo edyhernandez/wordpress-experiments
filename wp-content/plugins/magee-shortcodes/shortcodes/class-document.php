@@ -1,4 +1,5 @@
 <?php
+if( !class_exists('Magee_Document') ):
 class Magee_Document {
 
     public static $args;
@@ -33,27 +34,16 @@ class Magee_Document {
 		);
         extract( $defaults );
 		self::$args = $defaults;
+		
 		$html = '';
 		switch(esc_attr($viewer)){
 		case 'google':
-		$html .= '<div id="'.esc_attr($id).'" class="magee-document ' .esc_attr($class) . '" ><iframe src="http://docs.google.com/viewer?url='.esc_url($url) .'&embedded=true" width="' . esc_attr($width) . '" height="'.esc_attr($height). '" ></iframe></div>';
+		$html .= '<div id="'.esc_attr($id).'" class="magee-document ' .esc_attr($class) . '" data-responsive="'.esc_attr($responsive).'" data-width="'.esc_attr($width).'" data-height="'.esc_attr($height).'"><iframe src="//docs.google.com/viewer?url='.esc_url($url) .'&embedded=true" width="' . esc_attr($width) . 'px" height="'.esc_attr($height). 'px" ></iframe></div>';
 		break;
 		case 'microsoft':
-		$html .= '<div id="'.esc_attr($id).'" class="magee-document ' .esc_attr($class) . '"><iframe src="https://view.officeapps.live.com/op/embed.aspx?src='.esc_url($url) .'" width="' . esc_attr($width) . '" height="' .  esc_attr($height) . '" class="su-document' .esc_attr($class) . '" id="'.esc_attr($id).'"></iframe></div>';
+		$html .= '<div id="'.esc_attr($id).'" class="magee-document ' .esc_attr($class) . '" data-responsive="'.esc_attr($responsive).'" data-width="'.esc_attr($width).'" data-height="'.esc_attr($height).'"><iframe src="//view.officeapps.live.com/op/embed.aspx?src='.esc_url($url) .'" width="' . esc_attr($width) . 'px" height="' .  esc_attr($height) . 'px" class="su-document' .esc_attr($class) . '" id="'.esc_attr($id).'"></iframe></div>';
 		break;
 		}
-		
-		if($responsive == 'yes'):
-		$html .= "<script>";
-		$html .= "var width = document.getElementsByClassName('magee-document')[0].clientWidth;           
-		          if( width < '".$width."'){
-				  var op = '".$height."'/'".$width."' ;
-				  document.getElementsByTagName('iframe')[0].style.width = width + 'px';
-				  document.getElementsByTagName('iframe')[0].style.height = op*width + 'px';
-				  }             	   
-				 ";
-		$html .= "</script>";
-		endif;
 		
 		return $html;
 		
@@ -61,3 +51,4 @@ class Magee_Document {
 }
 
 new Magee_Document();		
+endif;

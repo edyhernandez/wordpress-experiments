@@ -1,4 +1,5 @@
 <?php
+if( !class_exists('Magee_Image_Compare') ):
 class Magee_Image_Compare {
 
 	public static $args;
@@ -24,6 +25,8 @@ class Magee_Image_Compare {
 			array(
 				'id' =>'',
 				'class' =>'',
+				'style' => '',
+				'percent' => '',
 				'image_left' =>'',
 				'image_right' =>'',
 			), $args
@@ -33,20 +36,14 @@ class Magee_Image_Compare {
 		self::$args = $defaults;
 		$unqid = uniqid( 'class-');
 		$class .= $unqid;
-		$html = '<div  id="'.esc_attr($id).'" class="twentytwenty-container '.esc_attr($class).'">
+		$html = '<div  id="'.esc_attr($id).'" class="magee-image-compare twentytwenty-container '.esc_attr($class).'" data-pct="'.esc_attr($percent).'" data-orientation="'.esc_attr($style).'">
 				  <img src="'.$image_left.'">
-				  <img src="'.$image_right.'">
-				</div>' ;		
-		$html .= '<script>';
-		$html .= 'jQuery(function($) {';
-		$html .= '$(window).load(function() {
-					  $(".'.$class.'").twentytwenty();
-				  });';
-		$html .= '});' ;			
-		$html .= '</script>';		
+		          <img src="'.$image_right.'">
+				</div>' ;	
 		return $html;
 	}
 	
 }
 
 new Magee_Image_Compare();		
+endif;
